@@ -20,10 +20,9 @@
 
 #include <fstream>
 
-
 namespace
 {
-vtkSmartPointer<vtkUnstructuredGrid> MakeMesh();
+std::vector<vtkSmartPointer<vtkUnstructuredGrid>> MakeMesh();
 }
 
 int main(int, char *[])
@@ -56,7 +55,7 @@ int main(int, char *[])
 	textProperty->SetJustificationToCentered();
 
 	// Create and link the mappers actors and renderers together.
-	mapper->SetInputData(uGrid);
+	mapper->SetInputData(uGrid.front());
 
 	actor->SetMapper(mapper);
 	actor->GetProperty()->SetColor(colors->GetColor3d("Red").GetData());
@@ -99,10 +98,8 @@ int main(int, char *[])
 namespace
 {
 
-vtkSmartPointer<vtkUnstructuredGrid> MakeMesh()
+std::vector<vtkSmartPointer<vtkUnstructuredGrid>> MakeMesh()
 {
-	vtkNew<vtkUnstructuredGrid> result;
-
 	std::ifstream is
 			("/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d");
 	vtkNew<vtkPoints> points;
@@ -115,9 +112,8 @@ vtkSmartPointer<vtkUnstructuredGrid> MakeMesh()
 		is >> x >> y >> z >> incrementedNodeNumber;
 		points->InsertNextPoint(x, y, z);
 	}
-	result->SetPoints(points);
 
-	vtkNew<vtkCellArray> cellArray;
+	std::map<unsigned, vtkNew<vtkCellArray>> cellArrays;
 	for (unsigned elementNumber = 0; elementNumber < elementCount;
 			++elementNumber) {
 		unsigned volumeIndex;
@@ -132,10 +128,15 @@ vtkSmartPointer<vtkUnstructuredGrid> MakeMesh()
 		unsigned incrementedElementNumber;
 		is >> incrementedElementNumber;
 
-		cellArray->InsertNextCell(4, nodeNumbers);
+		cellArrays[volumeIndex]->InsertNextCell(4, nodeNumbers);
 	}
 
-	result->SetCells(VTK_TETRA, cellArray);
+	std::vector<vtkSmartPointer<vtkUnstructuredGrid>> result;
+	for (const auto &[volumeIndex, cells]: cellArrays) {
+		auto &volume = result.emplace_back(vtkNew<vtkUnstructuredGrid>());
+		volume->SetPoints(points);
+		volume->SetCells(VTK_TETRA, cells);
+	}
 	return result;
 }
 
