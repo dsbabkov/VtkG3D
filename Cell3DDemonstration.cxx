@@ -33,43 +33,33 @@ int main(int, char *[])
 	std::array<unsigned char, 4> bkg{{ 51, 77, 102, 255 }};
 	colors->SetColor("BkgColor", bkg.data());
 
-	vtkNew<vtkTextMapper> textMapper;
 	vtkNew<vtkActor2D> textActor;
 
-	auto uGrid = MakeMesh();
-	vtkNew<vtkDataSetMapper> mapper;
-	vtkNew<vtkActor> actor;
 	vtkNew<vtkRenderer> renderer;
-
-	const char *title = "Tetrahedron";
-
 	vtkNew<vtkRenderWindow> renWin;
-	renWin->SetWindowName("Cell3D Demonstration");
-
 	vtkNew<vtkRenderWindowInteractor> iRen;
 	iRen->SetRenderWindow(renWin);
 
-	// Create one text property for all
-	vtkNew<vtkTextProperty> textProperty;
-	textProperty->SetFontSize(16);
-	textProperty->SetJustificationToCentered();
+	auto uGrids = MakeMesh();
+	std::vector<vtkSmartPointer<vtkDataSetMapper>> mappers;
+	std::vector<vtkSmartPointer<vtkActor>> actors;
 
-	// Create and link the mappers actors and renderers together.
-	mapper->SetInputData(uGrid.front());
+	for (auto &uGrid: uGrids) {
+		auto &mapper = mappers.emplace_back(vtkNew<vtkDataSetMapper>{});
+		auto &actor = actors.emplace_back(vtkNew<vtkActor>{});
 
-	actor->SetMapper(mapper);
-	actor->GetProperty()->SetColor(colors->GetColor3d("Red").GetData());
-	actor->GetProperty()->SetEdgeColor(colors->GetColor3d("Black").GetData());
-	actor->GetProperty()->SetEdgeVisibility(true);
+		// Create and link the mappers actors and renderers together.
+		mapper->SetInputData(uGrid);
 
-	renderer->AddViewProp(actor);
+		actor->SetMapper(mapper);
+		static int i = 0;
+		++i;
+		actor->GetProperty()->SetColor(colors->GetColor3d(i == 1 ? "Red": "Blue").GetData());
+		actor->GetProperty()->SetEdgeColor(colors->GetColor3d("Black").GetData());
+		actor->GetProperty()->SetEdgeVisibility(true);
 
-	textMapper->SetInput(title);
-	textMapper->SetTextProperty(textProperty);
-
-	textActor->SetMapper(textMapper);
-	textActor->SetPosition(120, 16);
-	renderer->AddViewProp(textActor);
+		renderer->AddViewProp(actor);
+	}
 
 	renWin->AddRenderer(renderer);
 
