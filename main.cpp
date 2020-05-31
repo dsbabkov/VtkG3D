@@ -24,10 +24,10 @@
 
 namespace
 {
-std::vector<vtkSmartPointer<VtkMesh>> MakeMesh2();
+std::vector<vtkSmartPointer<VtkMesh>> makeMesh(const char *path);
 }
 
-int main(int, char *[])
+int main(int argc, char *argv[])
 {
 	vtkNew<vtkNamedColors> colors;
 
@@ -42,7 +42,7 @@ int main(int, char *[])
 	vtkNew<vtkRenderWindowInteractor> iRen;
 	iRen->SetRenderWindow(renWin);
 
-	auto uGrids = MakeMesh2();
+	auto uGrids = makeMesh(argc == 1 ? "/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d" : argv[1]);
 	std::vector<vtkSmartPointer<vtkDataSetMapper>> mappers;
 	std::vector<vtkSmartPointer<vtkActor>> actors;
 
@@ -90,8 +90,8 @@ int main(int, char *[])
 namespace
 {
 
-std::vector<vtkSmartPointer<VtkMesh>> MakeMesh2() {
-	auto mesh = new Mesh(readMesh("/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d")); // утечка
+std::vector<vtkSmartPointer<VtkMesh>> makeMesh(const char *path) {
+	auto mesh = new Mesh(readMesh(path)); // утечка
 	std::vector<vtkSmartPointer<VtkMesh>> result;
 	vtkNew<vtkPoints> points;
 	for (const auto &[nodeNumber, node]: mesh->nodes) {
