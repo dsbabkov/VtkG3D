@@ -1,16 +1,11 @@
 #include "MeshVtkImplementation.h"
 
-vtkIdType MeshVtkImplementation::GetNumberOfCells()
+vtkIdType MeshVtkImplementation::GetNumberOfCells() const
 {
 	return volume->elementNumbers.size();
 }
 
-int MeshVtkImplementation::GetCellType(vtkIdType cellId)
-{
-	return VTK_TETRA;
-}
-
-void MeshVtkImplementation::GetCellPoints(vtkIdType cellId, vtkIdList *ptIds)
+void MeshVtkImplementation::GetCellPoints(vtkIdType cellId, vtkIdList *ptIds) const
 {
 	auto it = volume->elementNumbers.begin();
 	while(cellId--) {
@@ -26,7 +21,7 @@ void MeshVtkImplementation::GetCellPoints(vtkIdType cellId, vtkIdList *ptIds)
 	ptIds->InsertNextId(element.nodeNumbers[3]);
 }
 
-void MeshVtkImplementation::GetPointCells(vtkIdType ptId, vtkIdList *cellIds)
+void MeshVtkImplementation::GetPointCells(vtkIdType ptId, vtkIdList *cellIds) const
 {
 	std::cout << "GetPointCells\n";
 	unsigned nodeNumber = ptId;
@@ -60,19 +55,9 @@ void MeshVtkImplementation::GetPointCells(vtkIdType ptId, vtkIdList *cellIds)
 
 }
 
-int MeshVtkImplementation::GetMaxCellSize()
-{
-	return 4;
-}
-
-void MeshVtkImplementation::GetIdsOfCellsOfType(int type, vtkIdTypeArray *array)
+void MeshVtkImplementation::GetIdsOfCellsOfType(int type, vtkIdTypeArray *array) const
 {
 	assert("Not implemented" == nullptr);
-}
-
-int MeshVtkImplementation::IsHomogeneous()
-{
-	return true;
 }
 
 void MeshVtkImplementation::Allocate(vtkIdType numCells, int extSize)
@@ -99,4 +84,10 @@ vtkIdType MeshVtkImplementation::InsertNextCell(int type, vtkIdType npts, const 
 vtkIdType MeshVtkImplementation::InsertNextCell(int type, vtkIdType npts, const vtkIdType ptIds[])
 {
 	assert("Not implemented" == nullptr);
+}
+
+MeshVtkImplementation *MeshVtkImplementation::New()
+{
+	std::cout << "new MeshVtkImplementation created\n";
+	VTK_STANDARD_NEW_BODY(MeshVtkImplementation)
 }

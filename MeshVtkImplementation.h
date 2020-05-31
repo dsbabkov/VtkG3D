@@ -12,23 +12,26 @@ class MeshVtkImplementation: public vtkObject
 {
 	vtkTypeMacro(MeshVtkImplementation, vtkObject);
 public:
-	static MeshVtkImplementation *New() {
-		std::cout << "new MeshVtkImplementation created\n";
-		VTK_STANDARD_NEW_BODY(MeshVtkImplementation)
+	static MeshVtkImplementation *New();
+	vtkIdType GetNumberOfCells() const;
+
+	constexpr int GetCellType(vtkIdType /*cellId*/) const {
+		return VTK_TETRA;
 	}
-	vtkIdType GetNumberOfCells();
 
-	int GetCellType(vtkIdType cellId);
+	void GetCellPoints(vtkIdType cellId, vtkIdList *ptIds) const;
 
-	void GetCellPoints(vtkIdType cellId, vtkIdList *ptIds);
+	void GetPointCells(vtkIdType ptId, vtkIdList *cellIds) const;
 
-	void GetPointCells(vtkIdType ptId, vtkIdList *cellIds);
+	constexpr int GetMaxCellSize() const {
+		return 4;
+	}
 
-	int GetMaxCellSize();
+	void GetIdsOfCellsOfType(int type, vtkIdTypeArray *array) const;
 
-	void GetIdsOfCellsOfType(int type, vtkIdTypeArray *array);
-
-	int IsHomogeneous();
+	constexpr int IsHomogeneous() const {
+		return true;
+	}
 
 	void Allocate(vtkIdType numCells, int extSize = 1000);
 
