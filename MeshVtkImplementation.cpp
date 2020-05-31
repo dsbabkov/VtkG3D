@@ -1,4 +1,7 @@
 #include "MeshVtkImplementation.h"
+#include "Mesh.h"
+#include <vtkIdList.h>
+#include <vtkIdTypeArray.h>
 
 vtkIdType MeshVtkImplementation::GetNumberOfCells() const
 {

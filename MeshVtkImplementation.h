@@ -2,11 +2,10 @@
 
 #include <vtkObject.h>
 #include <vtkCellType.h>
-#include <vtkIdList.h>
-#include <vtkIdTypeArray.h>
-#include "Mesh.h"
 
 class Volume;
+class vtkIdList;
+class vtkIdTypeArray;
 
 class MeshVtkImplementation: public vtkObject
 {
