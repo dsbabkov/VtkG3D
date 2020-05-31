@@ -14,6 +14,7 @@
 #include <vtkTextMapper.h>
 #include <vtkTextProperty.h>
 #include <vtkUnstructuredGrid.h>
+#include "VtkMesh.h"
 
 #include <array>
 #include <cstdlib>
@@ -24,6 +25,7 @@
 namespace
 {
 std::vector<vtkSmartPointer<vtkUnstructuredGrid>> MakeMesh();
+std::vector<vtkSmartPointer<VtkMesh>> MakeMesh2();
 }
 
 int main(int, char *[])
@@ -41,7 +43,7 @@ int main(int, char *[])
 	vtkNew<vtkRenderWindowInteractor> iRen;
 	iRen->SetRenderWindow(renWin);
 
-	auto uGrids = MakeMesh();
+	auto uGrids = MakeMesh2();
 	std::vector<vtkSmartPointer<vtkDataSetMapper>> mappers;
 	std::vector<vtkSmartPointer<vtkActor>> actors;
 
@@ -119,6 +121,21 @@ std::vector<vtkSmartPointer<vtkUnstructuredGrid>> MakeMesh()
 		auto &volume = result.emplace_back(vtkNew<vtkUnstructuredGrid>());
 		volume->SetPoints(points);
 		volume->SetCells(VTK_TETRA, cells);
+	}
+	return result;
+}
+
+std::vector<vtkSmartPointer<VtkMesh>> MakeMesh2() {
+	auto mesh = new Mesh(readMesh("/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d")); // утечка
+	std::vector<vtkSmartPointer<VtkMesh>> result;
+	vtkNew<vtkPoints> points;
+	for (const auto &[nodeNumber, node]: mesh->nodes) {
+		points->InsertNextPoint(node.x, node.y, node.z);
+	}
+	for (auto &[volumeNumber, volume]: mesh->volumes) {
+		auto &vtkVolume = *result.emplace_back(vtkNew<VtkMesh>{});
+		vtkVolume.GetImplementation()->volume = &volume;
+		vtkVolume.SetPoints(points);
 	}
 	return result;
 }
