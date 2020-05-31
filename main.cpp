@@ -10,16 +10,12 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkSmartPointer.h>
-#include <vtkTetra.h>
 #include <vtkTextMapper.h>
-#include <vtkTextProperty.h>
-#include <vtkUnstructuredGrid.h>
 #include "VtkMesh.h"
 
 #include <array>
 #include <cstdlib>
 
-#include <fstream>
 #include "Mesh.h"
 
 namespace
