@@ -16,19 +16,18 @@ find_package(VTK COMPONENTS
   vtkRenderingFreeType
   vtkRenderingOpenGL2 QUIET)
 if (NOT VTK_FOUND)
-  message("Skipping Cell3DDemonstration: ${VTK_NOT_FOUND_MESSAGE}")
-  return ()
+  message(SEND_ERROR "VTK NOT FOUND")
 endif()
 message (STATUS "VTK_VERSION: ${VTK_VERSION}")
 if (VTK_VERSION VERSION_LESS "8.90.0")
   # old system
   include(${VTK_USE_FILE})
-  add_executable(Cell3DDemonstration MACOSX_BUNDLE main.cpp Mesh.cpp)
-  target_link_libraries(Cell3DDemonstration PRIVATE ${VTK_LIBRARIES})
+  add_executable(${PROJECT_NAME} MACOSX_BUNDLE main.cpp Mesh.cpp)
+  target_link_libraries(${PROJECT_NAME} PRIVATE ${VTK_LIBRARIES})
 else ()
   # include all components
-  add_executable(Cell3DDemonstration MACOSX_BUNDLE main.cpp Mesh.cpp)
-  target_link_libraries(Cell3DDemonstration PRIVATE ${VTK_LIBRARIES})
+  add_executable(${PROJECT_NAME} MACOSX_BUNDLE main.cpp Mesh.cpp)
+  target_link_libraries(${PROJECT_NAME} PRIVATE ${VTK_LIBRARIES})
   # vtk_module_autoinit is needed
   vtk_module_autoinit(
     TARGETS ${PROJECT_NAME}
