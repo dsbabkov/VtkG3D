@@ -1,14 +1,14 @@
-#include "MeshVtkImplementation.h"
+#include "VolumeVtkImplementation.h"
 #include "Mesh.h"
 #include <vtkIdList.h>
 #include <vtkIdTypeArray.h>
 
-vtkIdType MeshVtkImplementation::GetNumberOfCells() const
+vtkIdType VolumeVtkImplementation::GetNumberOfCells() const
 {
 	return volume->elementNumbers.size();
 }
 
-void MeshVtkImplementation::GetCellPoints(vtkIdType cellId, vtkIdList *ptIds) const
+void VolumeVtkImplementation::GetCellPoints(vtkIdType cellId, vtkIdList *ptIds) const
 {
 	auto it = volume->elementNumbers.begin();
 	while(cellId--) {
@@ -24,7 +24,7 @@ void MeshVtkImplementation::GetCellPoints(vtkIdType cellId, vtkIdList *ptIds) co
 	ptIds->InsertNextId(element.nodeNumbers[3]);
 }
 
-void MeshVtkImplementation::GetPointCells(vtkIdType ptId, vtkIdList *cellIds) const
+void VolumeVtkImplementation::GetPointCells(vtkIdType ptId, vtkIdList *cellIds) const
 {
 	std::cout << "GetPointCells\n";
 	unsigned nodeNumber = ptId;
@@ -58,38 +58,38 @@ void MeshVtkImplementation::GetPointCells(vtkIdType ptId, vtkIdList *cellIds) co
 
 }
 
-void MeshVtkImplementation::GetIdsOfCellsOfType(int type, vtkIdTypeArray *array) const
+void VolumeVtkImplementation::GetIdsOfCellsOfType(int type, vtkIdTypeArray *array) const
 {
 	assert("Not implemented" == nullptr);
 }
 
-void MeshVtkImplementation::Allocate(vtkIdType numCells, int extSize)
+void VolumeVtkImplementation::Allocate(vtkIdType numCells, int extSize)
 {
 	assert("Not implemented" == nullptr);
 }
 
-vtkIdType MeshVtkImplementation::InsertNextCell(int type, vtkIdList *ptIds)
+vtkIdType VolumeVtkImplementation::InsertNextCell(int type, vtkIdList *ptIds)
 {
 	assert("Not implemented" == nullptr);
 }
 
 void
-MeshVtkImplementation::ReplaceCell(vtkIdType cellId, int npts, const vtkIdType pts[])
+VolumeVtkImplementation::ReplaceCell(vtkIdType cellId, int npts, const vtkIdType pts[])
 {
 	assert("Not implemented" == nullptr);
 }
 
-vtkIdType MeshVtkImplementation::InsertNextCell(int type, vtkIdType npts, const vtkIdType ptIds[], vtkIdType nfaces, const vtkIdType faces[])
+vtkIdType VolumeVtkImplementation::InsertNextCell(int type, vtkIdType npts, const vtkIdType ptIds[], vtkIdType nfaces, const vtkIdType faces[])
 {
 	assert("Not implemented" == nullptr);
 }
 
-vtkIdType MeshVtkImplementation::InsertNextCell(int type, vtkIdType npts, const vtkIdType ptIds[])
+vtkIdType VolumeVtkImplementation::InsertNextCell(int type, vtkIdType npts, const vtkIdType ptIds[])
 {
 	assert("Not implemented" == nullptr);
 }
 
-MeshVtkImplementation *MeshVtkImplementation::New()
+VolumeVtkImplementation *VolumeVtkImplementation::New()
 {
-	VTK_STANDARD_NEW_BODY(MeshVtkImplementation)
+	VTK_STANDARD_NEW_BODY(VolumeVtkImplementation)
 }

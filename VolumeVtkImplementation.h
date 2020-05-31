@@ -7,11 +7,11 @@ class Volume;
 class vtkIdList;
 class vtkIdTypeArray;
 
-class MeshVtkImplementation: public vtkObject
+class VolumeVtkImplementation: public vtkObject
 {
-	vtkTypeMacro(MeshVtkImplementation, vtkObject);
+	vtkTypeMacro(VolumeVtkImplementation, vtkObject);
 public:
-	static MeshVtkImplementation *New();
+	static VolumeVtkImplementation *New();
 	vtkIdType GetNumberOfCells() const;
 
 	constexpr int GetCellType(vtkIdType /*cellId*/) const {

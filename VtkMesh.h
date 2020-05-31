@@ -1,9 +1,9 @@
 #pragma once
 
-#include "MeshVtkImplementation.h"
+#include "VolumeVtkImplementation.h"
 #include <vtkMappedUnstructuredGrid.h>
 
-vtkMakeMappedUnstructuredGrid(VtkMesh, MeshVtkImplementation)
+vtkMakeMappedUnstructuredGrid(VtkMesh, VolumeVtkImplementation)
 
 inline VtkMesh * VtkMesh::New() {
 	return new VtkMesh;
