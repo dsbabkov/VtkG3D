@@ -24,7 +24,6 @@
 
 namespace
 {
-std::vector<vtkSmartPointer<vtkUnstructuredGrid>> MakeMesh();
 std::vector<vtkSmartPointer<VtkMesh>> MakeMesh2();
 }
 
@@ -90,40 +89,6 @@ int main(int, char *[])
 
 namespace
 {
-
-std::vector<vtkSmartPointer<vtkUnstructuredGrid>> MakeMesh()
-{
-	Mesh mesh = readMesh("/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d");
-
-	std::ifstream is
-			("/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d");
-	vtkNew<vtkPoints> points;
-	for (const auto &[nodeNumber, node]: mesh.nodes) {
-		points->InsertNextPoint(node.x, node.y, node.z);
-	}
-
-	std::map<unsigned, vtkSmartPointer<vtkCellArray>> cellArrays;
-	for (const auto &[volumeNumber, volume]: mesh.volumes) {
-		auto &[_, cellArray] = *cellArrays.emplace_hint(cellArrays.cend(), volumeNumber, vtkNew<vtkCellArray>{});
-		for (const unsigned elementNumber: volume.elementNumbers) {
-			const Element &element = mesh.elements.at(elementNumber);
-			std::array<vtkIdType, 4> ids;
-			auto it = ids.begin();
-			for (unsigned nodeNumber: element.nodeNumbers) {
-				*it++ = nodeNumber;
-			}
-			cellArray->InsertNextCell(4, ids.data());
-		}
-	}
-
-	std::vector<vtkSmartPointer<vtkUnstructuredGrid>> result;
-	for (const auto &[volumeNumber, cells]: cellArrays) {
-		auto &volume = result.emplace_back(vtkNew<vtkUnstructuredGrid>());
-		volume->SetPoints(points);
-		volume->SetCells(VTK_TETRA, cells);
-	}
-	return result;
-}
 
 std::vector<vtkSmartPointer<VtkMesh>> MakeMesh2() {
 	auto mesh = new Mesh(readMesh("/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d")); // утечка
