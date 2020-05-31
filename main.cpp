@@ -19,6 +19,7 @@
 #include <cstdlib>
 
 #include <fstream>
+#include "Mesh.h"
 
 namespace
 {
@@ -90,39 +91,31 @@ namespace
 
 std::vector<vtkSmartPointer<vtkUnstructuredGrid>> MakeMesh()
 {
+	Mesh mesh = readMesh("/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d");
+
 	std::ifstream is
 			("/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d");
 	vtkNew<vtkPoints> points;
-	unsigned nodeCount, elementCount;
-	is >> nodeCount >> elementCount >> nodeCount;
-
-	for (unsigned nodeNumber = 0; nodeNumber < nodeCount; ++nodeNumber) {
-		unsigned incrementedNodeNumber;
-		double x, y, z;
-		is >> x >> y >> z >> incrementedNodeNumber;
-		points->InsertNextPoint(x, y, z);
+	for (const auto &[nodeNumber, node]: mesh.nodes) {
+		points->InsertNextPoint(node.x, node.y, node.z);
 	}
 
-	std::map<unsigned, vtkNew<vtkCellArray>> cellArrays;
-	for (unsigned elementNumber = 0; elementNumber < elementCount;
-			++elementNumber) {
-		unsigned volumeIndex;
-		is >> volumeIndex;
-
-		vtkIdType nodeNumbers[4];
-		for (auto &nodeNumber: nodeNumbers) {
-			is >> nodeNumber;
-			nodeNumber--;
+	std::map<unsigned, vtkSmartPointer<vtkCellArray>> cellArrays;
+	for (const auto &[volumeNumber, volume]: mesh.volumes) {
+		auto &[_, cellArray] = *cellArrays.emplace_hint(cellArrays.cend(), volumeNumber, vtkNew<vtkCellArray>{});
+		for (const unsigned elementNumber: volume.elementNumbers) {
+			const Element &element = mesh.elements.at(elementNumber);
+			std::array<vtkIdType, 4> ids;
+			auto it = ids.begin();
+			for (unsigned nodeNumber: element.nodeNumbers) {
+				*it++ = nodeNumber;
+			}
+			cellArray->InsertNextCell(4, ids.data());
 		}
-
-		unsigned incrementedElementNumber;
-		is >> incrementedElementNumber;
-
-		cellArrays[volumeIndex]->InsertNextCell(4, nodeNumbers);
 	}
 
 	std::vector<vtkSmartPointer<vtkUnstructuredGrid>> result;
-	for (const auto &[volumeIndex, cells]: cellArrays) {
+	for (const auto &[volumeNumber, cells]: cellArrays) {
 		auto &volume = result.emplace_back(vtkNew<vtkUnstructuredGrid>());
 		volume->SetPoints(points);
 		volume->SetCells(VTK_TETRA, cells);

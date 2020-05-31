@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
-project(Cell3DDemonstration)
+project(VtkG3D)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,15 +23,15 @@ message (STATUS "VTK_VERSION: ${VTK_VERSION}")
 if (VTK_VERSION VERSION_LESS "8.90.0")
   # old system
   include(${VTK_USE_FILE})
-  add_executable(Cell3DDemonstration MACOSX_BUNDLE Cell3DDemonstration.cxx )
+  add_executable(Cell3DDemonstration MACOSX_BUNDLE main.cpp Mesh.cpp)
   target_link_libraries(Cell3DDemonstration PRIVATE ${VTK_LIBRARIES})
 else ()
   # include all components
-  add_executable(Cell3DDemonstration MACOSX_BUNDLE Cell3DDemonstration.cxx )
+  add_executable(Cell3DDemonstration MACOSX_BUNDLE main.cpp Mesh.cpp)
   target_link_libraries(Cell3DDemonstration PRIVATE ${VTK_LIBRARIES})
   # vtk_module_autoinit is needed
   vtk_module_autoinit(
-    TARGETS Cell3DDemonstration
+    TARGETS ${PROJECT_NAME}
     MODULES ${VTK_LIBRARIES}
     )
 endif () 
