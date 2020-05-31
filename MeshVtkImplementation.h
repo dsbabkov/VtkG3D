@@ -17,17 +17,14 @@ public:
 		VTK_STANDARD_NEW_BODY(MeshVtkImplementation)
 	}
 	vtkIdType GetNumberOfCells() {
-		std::cout << "GetNumberOfCells: " << volume->elementNumbers.size() << '\n';
 		return volume->elementNumbers.size();
 	}
 
 	int GetCellType(vtkIdType cellId) {
-		std::cout << "GetCellType: VTK_TETRA\n";
 		return VTK_TETRA;
 	}
 
 	void GetCellPoints(vtkIdType cellId, vtkIdList *ptIds) {
-		std::cout << "GetCellPoints\n";
 		auto it = volume->elementNumbers.begin();
 		while(cellId--) {
 			it++;
@@ -76,7 +73,6 @@ public:
 	}
 
 	int GetMaxCellSize() {
-		std::cout << "GetMaxCellSize\n";
 		return 4;
 	}
 
@@ -85,7 +81,6 @@ public:
 	}
 
 	int IsHomogeneous() {
-		std::cout << "IsHomogeneous\n";
 		return true;
 	}
 
