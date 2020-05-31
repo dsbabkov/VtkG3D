@@ -88,6 +88,5 @@ vtkIdType MeshVtkImplementation::InsertNextCell(int type, vtkIdType npts, const 
 
 MeshVtkImplementation *MeshVtkImplementation::New()
 {
-	std::cout << "new MeshVtkImplementation created\n";
 	VTK_STANDARD_NEW_BODY(MeshVtkImplementation)
 }
