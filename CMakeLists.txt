@@ -22,11 +22,11 @@ message (STATUS "VTK_VERSION: ${VTK_VERSION}")
 if (VTK_VERSION VERSION_LESS "8.90.0")
   # old system
   include(${VTK_USE_FILE})
-  add_executable(${PROJECT_NAME} MACOSX_BUNDLE main.cpp Mesh.cpp VolumeVtkImplementation.cpp VtkVolume.cpp)
+  add_executable(${PROJECT_NAME} MACOSX_BUNDLE main.cpp Mesh.cpp VolumeVtkImplementation.cpp VtkVolume.cpp VtkNodes.cpp)
   target_link_libraries(${PROJECT_NAME} PRIVATE ${VTK_LIBRARIES})
 else ()
   # include all components
-  add_executable(${PROJECT_NAME} MACOSX_BUNDLE main.cpp Mesh.cpp VolumeVtkImplementation.cpp VtkVolume.cpp)
+  add_executable(${PROJECT_NAME} MACOSX_BUNDLE main.cpp Mesh.cpp VolumeVtkImplementation.cpp VtkVolume.cpp VtkNodes.cpp)
   target_link_libraries(${PROJECT_NAME} PRIVATE ${VTK_LIBRARIES})
   # vtk_module_autoinit is needed
   vtk_module_autoinit(
