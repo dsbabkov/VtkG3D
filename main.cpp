@@ -11,7 +11,8 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkSmartPointer.h>
 #include <vtkTextMapper.h>
-#include "VtkMesh.h"
+#include <vtkMappedDataArray.h>
+#include "VtkVolume.h"
 
 #include <array>
 #include <cstdlib>
@@ -20,7 +21,7 @@
 
 namespace
 {
-std::vector<vtkSmartPointer<VtkMesh>> makeMesh(const char *path);
+std::vector<vtkSmartPointer<VtkVolume>> makeMesh(const char *path);
 }
 
 int main(int argc, char *argv[])
@@ -86,15 +87,15 @@ int main(int argc, char *argv[])
 namespace
 {
 
-std::vector<vtkSmartPointer<VtkMesh>> makeMesh(const char *path) {
+std::vector<vtkSmartPointer<VtkVolume>> makeMesh(const char *path) {
 	auto mesh = new Mesh(readMesh(path)); // утечка
-	std::vector<vtkSmartPointer<VtkMesh>> result;
+	std::vector<vtkSmartPointer<VtkVolume>> result;
 	vtkNew<vtkPoints> points;
 	for (const auto &[nodeNumber, node]: mesh->nodes) {
 		points->InsertNextPoint(node.x, node.y, node.z);
 	}
 	for (auto &[volumeNumber, volume]: mesh->volumes) {
-		auto &vtkVolume = *result.emplace_back(vtkNew<VtkMesh>{});
+		auto &vtkVolume = *result.emplace_back(vtkNew<VtkVolume>{});
 		vtkVolume.GetImplementation()->volume = &volume;
 		vtkVolume.SetPoints(points);
 	}
