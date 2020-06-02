@@ -5,6 +5,10 @@
 
 class VtkNodes: public vtkMappedDataArray<float>
 {
+	VtkNodes() {
+		NumberOfComponents = 3;
+	}
+
 	vtkMappedDataArrayNewInstanceMacro(VtkNodes)
 public:
 	static VtkNodes *New();

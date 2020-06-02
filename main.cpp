@@ -91,14 +91,8 @@ std::vector<vtkSmartPointer<VtkVolume>> makeMesh(const char *path) {
 	auto mesh = new Mesh(readMesh(path)); // утечка
 	std::vector<vtkSmartPointer<VtkVolume>> result;
 	vtkNew<vtkPoints> points;
-//	for (const auto &[nodeNumber, node]: mesh->nodes) {
-//		points->InsertNextPoint(node.x, node.y, node.z);
-//	}
 	vtkNew<VtkNodes> nodes;
 	nodes->mesh = mesh;
-	nodes->SetNumberOfComponents(3);
-	nodes->InsertNextTuple3(123, 234, 345);
-	nodes->InsertNextTuple4(123, 234, 345, 1);
 	nodes->SetNumberOfTuples(mesh->nodes.size());
 	points->SetData(nodes);
 
