@@ -63,22 +63,16 @@ public:
 	}
 
 	ValueType GetValue(vtkIdType idx) const override {
-		if (idx == 0) {
-			cout << "idx 0\n";
-		}
-//		std::cout << idx << std::endl;
-		const auto nodeNumber = idx / 3;
-		auto it = mesh->nodes.cbegin();
-		std::advance(it, nodeNumber);
-		const Node &node = it->second;
-		const auto comp = idx - nodeNumber * 3;
-		switch (comp) {
-			case 0: return node.x;
-			case 1: return node.y;
-			case 2: return node.z;
-		}
-
 		assert("Not implemented" == nullptr);
+	}
+
+	double *GetTuple(vtkIdType nodeNumber) override {
+		static std::array<double, 3> result;
+		const Node &node = mesh->nodes.at(nodeNumber);
+		result[0] = node.x;
+		result[1] = node.y;
+		result[2] = node.z;
+		return result.data();
 	}
 
 	ValueType& GetValueReference(vtkIdType idx) override {

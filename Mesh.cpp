@@ -9,7 +9,7 @@ Mesh readMesh(const char *path)
 	is >> nodeCount >> elementCount >> nodeCount;
 
 	std::map<unsigned, Node> nodes;
-	for (unsigned nodeNumber = 0; nodeNumber < nodeCount; ++nodeNumber) {
+	for (unsigned nodeNumber = 1; nodeNumber <= nodeCount; ++nodeNumber) {
 		unsigned incrementedNodeNumber;
 		auto &[_, node] = *nodes.emplace_hint(nodes.cend(), nodeNumber, Node{});
 		is >> node.x >> node.y >> node.z >> incrementedNodeNumber;
@@ -24,7 +24,7 @@ Mesh readMesh(const char *path)
 
 		for (auto &nodeNumber: element.nodeNumbers) {
 			is >> nodeNumber;
-			nodeNumber--;
+//			nodeNumber--;
 		}
 
 		unsigned incrementedElementNumber;
