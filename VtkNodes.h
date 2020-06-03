@@ -63,6 +63,9 @@ public:
 	}
 
 	ValueType GetValue(vtkIdType idx) const override {
+		if (idx == 0) {
+			cout << "idx 0\n";
+		}
 //		std::cout << idx << std::endl;
 		const auto nodeNumber = idx / 3;
 		auto it = mesh->nodes.cbegin();
@@ -83,8 +86,6 @@ public:
 	}
 
 	void SetValue(vtkIdType idx, ValueType value) override {
-		std::cout << idx << ' ' << value << std::endl;
-		return;
 		assert("Not implemented" == nullptr);
 	}
 

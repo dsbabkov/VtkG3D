@@ -12,6 +12,7 @@
 #include <vtkSmartPointer.h>
 #include <vtkTextMapper.h>
 #include "VtkNodes.h"
+#include "VtkNodePoints.h"
 #include "VtkVolume.h"
 
 #include <array>
@@ -90,10 +91,11 @@ namespace
 std::vector<vtkSmartPointer<VtkVolume>> makeMesh(const char *path) {
 	auto mesh = new Mesh(readMesh(path)); // утечка
 	std::vector<vtkSmartPointer<VtkVolume>> result;
-	vtkNew<vtkPoints> points;
+	vtkNew<VtkNodePoints> points;
 	vtkNew<VtkNodes> nodes;
 	nodes->mesh = mesh;
 	nodes->SetNumberOfTuples(mesh->nodes.size());
+	points->nodes = nodes;
 	points->SetData(nodes);
 
 	for (auto &[volumeNumber, volume]: mesh->volumes) {
