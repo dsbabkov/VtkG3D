@@ -40,7 +40,9 @@ int main(int argc, char *argv[])
 	vtkNew<vtkRenderWindowInteractor> iRen;
 	iRen->SetRenderWindow(renWin);
 
-	auto uGrids = makeMesh(argc == 1 ? "/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d" : argv[1]);
+	const std::string src_dir = PATH_TO_SRC_DIR;
+	const std::string default_geometry = src_dir + "/cylinders.g3d";
+	auto uGrids = makeMesh(argc == 1 ? default_geometry.c_str() : argv[1]);
 	std::vector<vtkSmartPointer<vtkDataSetMapper>> mappers;
 	std::vector<vtkSmartPointer<vtkActor>> actors;
 

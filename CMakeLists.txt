@@ -34,3 +34,5 @@ else ()
     MODULES ${VTK_LIBRARIES}
     )
 endif () 
+
+add_definitions(-DPATH_TO_SRC_DIR="${CMAKE_CURRENT_LIST_DIR}")
