@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include <fstream>
+#include <iostream>
 
 Mesh readMesh(const char *path)
 {
@@ -9,7 +10,7 @@ Mesh readMesh(const char *path)
 	is >> nodeCount >> elementCount >> nodeCount;
 
 	std::map<unsigned, Node> nodes;
-	for (unsigned nodeNumber = 1; nodeNumber <= nodeCount; ++nodeNumber) {
+	for (unsigned nodeNumber = 0; nodeNumber < nodeCount; ++nodeNumber) {
 		unsigned incrementedNodeNumber;
 		auto &[_, node] = *nodes.emplace_hint(nodes.cend(), nodeNumber, Node{});
 		is >> node.x >> node.y >> node.z >> incrementedNodeNumber;
@@ -24,7 +25,7 @@ Mesh readMesh(const char *path)
 
 		for (auto &nodeNumber: element.nodeNumbers) {
 			is >> nodeNumber;
-//			nodeNumber--;
+			nodeNumber--;
 		}
 
 		unsigned incrementedElementNumber;
@@ -61,4 +62,27 @@ Mesh::Mesh(Mesh &&other) noexcept: nodes(std::move(other.nodes))
 	for (auto &[volumeNumber, volume]: volumes) {
 		volume.mesh = this;
 	}
+}
+
+void Mesh::removeVolume(unsigned int volumeNumber)
+{
+	const Volume &volume = volumes.at(volumeNumber);
+	for (const auto elementNumber: volume.elementNumbers) {
+		elements.erase(elementNumber);
+	}
+	volumes.erase(volumeNumber);
+
+	std::set<unsigned> orphanedNodes;
+	for (const auto &[nodeNumber, node]: nodes) {
+		orphanedNodes.insert(nodeNumber);
+	}
+	for (const auto &[elementNumber, element]: elements) {
+		for (const auto nodeNumber: element.nodeNumbers) {
+			orphanedNodes.erase(nodeNumber);
+		}
+	}
+	for (const auto nodeNumber: orphanedNodes) {
+		nodes.erase(nodeNumber);
+	}
+	std::cout << "orphaned nodes removed: " << orphanedNodes.size() << std::endl;
 }

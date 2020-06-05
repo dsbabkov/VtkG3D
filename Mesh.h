@@ -25,6 +25,8 @@ struct Mesh {
 	Mesh() = default;
 	Mesh (const Mesh &) = delete;
 	Mesh (Mesh &&other) noexcept;
+
+	void removeVolume(unsigned volumeNumber);
 };
 
 Mesh readMesh(const char *path);
