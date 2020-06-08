@@ -18,6 +18,7 @@
 #include <array>
 #include <cstdlib>
 
+#include "vtkext/vtkMappedDataSetMapper.h"
 #include "Mesh.h"
 
 namespace
@@ -38,17 +39,17 @@ int main(int argc, char *argv[])
 	vtkNew<vtkRenderer> renderer;
 	vtkNew<vtkRenderWindow> renWin;
 	vtkNew<vtkRenderWindowInteractor> iRen;
-	iRen->SetRenderWindow(renWin);
+	iRen->SetRenderWindow(renWin.GetPointer());
 
 	const std::string src_dir = PATH_TO_SRC_DIR;
 	const std::string default_geometry = src_dir + "/cylinders.g3d";
 	auto uGrids = makeMesh(argc == 1 ? default_geometry.c_str() : argv[1]);
-	std::vector<vtkSmartPointer<vtkDataSetMapper>> mappers;
+	std::vector<vtkSmartPointer<vtkMappedDataSetMapper>> mappers;
 	std::vector<vtkSmartPointer<vtkActor>> actors;
 
 	for (auto &uGrid: uGrids) {
-		auto &mapper = mappers.emplace_back(vtkNew<vtkDataSetMapper>{});
-		auto &actor = actors.emplace_back(vtkNew<vtkActor>{});
+		auto &mapper = mappers.emplace_back(vtkSmartPointer<vtkMappedDataSetMapper>::New());
+		auto &actor = actors.emplace_back(vtkSmartPointer<vtkActor>::New());
 
 		// Create and link the mappers actors and renderers together.
 		mapper->SetInputData(uGrid);
@@ -63,7 +64,7 @@ int main(int argc, char *argv[])
 		renderer->AddViewProp(actor);
 	}
 
-	renWin->AddRenderer(renderer);
+	renWin->AddRenderer(renderer.GetPointer());
 
 	int gridDimensions = 3;
 	int rendererSize = 300;
@@ -92,19 +93,20 @@ namespace
 
 std::vector<vtkSmartPointer<VtkVolume>> makeMesh(const char *path) {
 	auto mesh = new Mesh(readMesh(path)); // утечка
-//	mesh->removeVolume(2);
+	mesh->removeVolume(1);
 	std::vector<vtkSmartPointer<VtkVolume>> result;
 	vtkNew<VtkNodePoints> points;
 	vtkNew<VtkNodes> nodes;
 	nodes->mesh = mesh;
 	nodes->SetNumberOfTuples(mesh->nodes.size());
-	points->nodes = nodes;
-	points->SetData(nodes);
+	points->nodes = nodes.GetPointer();
+	points->SetData(nodes.GetPointer());
 
 	for (auto &[volumeNumber, volume]: mesh->volumes) {
-		auto &vtkVolume = *result.emplace_back(vtkNew<VtkVolume>{});
+		std::cout << volumeNumber << std::endl;
+		auto &vtkVolume = *result.emplace_back(vtkSmartPointer<VtkVolume>::New());
 		vtkVolume.GetImplementation()->volume = &volume;
-		vtkVolume.SetPoints(points);
+		vtkVolume.SetPoints(points.GetPointer());
 	}
 	return result;
 }

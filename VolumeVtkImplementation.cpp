@@ -71,6 +71,7 @@ void VolumeVtkImplementation::Allocate(vtkIdType numCells, int extSize)
 vtkIdType VolumeVtkImplementation::InsertNextCell(int type, vtkIdList *ptIds)
 {
 	assert("Not implemented" == nullptr);
+	return -1;   // *SMB*: stub
 }
 
 void
@@ -82,11 +83,13 @@ VolumeVtkImplementation::ReplaceCell(vtkIdType cellId, int npts, const vtkIdType
 vtkIdType VolumeVtkImplementation::InsertNextCell(int type, vtkIdType npts, const vtkIdType ptIds[], vtkIdType nfaces, const vtkIdType faces[])
 {
 	assert("Not implemented" == nullptr);
+	return -1;   // *SMB*: stub
 }
 
 vtkIdType VolumeVtkImplementation::InsertNextCell(int type, vtkIdType npts, const vtkIdType ptIds[])
 {
 	assert("Not implemented" == nullptr);
+	return -1;   // *SMB*: stub
 }
 
 VolumeVtkImplementation *VolumeVtkImplementation::New()

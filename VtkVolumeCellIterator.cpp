@@ -58,5 +58,7 @@ void VtkVolumeCellIterator::SetMappedUnstructuredGrid(vtkMappedUnstructuredGrid<
 
 VtkVolumeCellIterator *VtkVolumeCellIterator::New()
 {
-	return new VtkVolumeCellIterator;
+	VtkVolumeCellIterator *pIter = new VtkVolumeCellIterator;
+	//pIter->PointIds = vtkIdList
+	return pIter;
 }

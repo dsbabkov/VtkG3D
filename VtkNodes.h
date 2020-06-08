@@ -45,6 +45,7 @@ public:
 
 	vtkVariant GetVariantValue(vtkIdType idx) override {
 		assert("Not implemented" == nullptr);
+		return -1;   // *SMB*: stub
 	}
 
 	void SetVariantValue(vtkIdType idx, vtkVariant value) override {
@@ -60,10 +61,12 @@ public:
 	}
 	vtkIdType InsertNextTypedTuple(const ValueType *t) override {
 		assert("Not implemented" == nullptr);
+		return -1;   // *SMB*: stub 
 	}
 
 	ValueType GetValue(vtkIdType idx) const override {
 		assert("Not implemented" == nullptr);
+		return -1;   // *SMB*: stub
 	}
 
 	double *GetTuple(vtkIdType nodeNumber) override {
@@ -76,7 +79,9 @@ public:
 	}
 
 	ValueType& GetValueReference(vtkIdType idx) override {
-		assert("Not implemented" == nullptr);
+		assert("Not implemented" == nullptr);		
+		Node &node = mesh->nodes.at(idx);  // *SMB*:stub
+		return node.x;  // *SMB*: stub
 	}
 
 	void SetValue(vtkIdType idx, ValueType value) override {
@@ -89,6 +94,7 @@ public:
 
 	vtkIdType InsertNextValue(ValueType v) override {
 		assert("Not implemented" == nullptr);
+		return -1;   // *SMB*: stub
 	}
 
 	void InsertValue(vtkIdType idx, ValueType v) override {
