@@ -5,7 +5,6 @@
 Mesh readMesh(const char *path)
 {
 	std::ifstream is(path);
-			//("/home/dmitriy/qtprojects/poligonqt/msqt/examples/cylinders_cast.g3d");
 	unsigned nodeCount, elementCount;
 	is >> nodeCount >> elementCount >> nodeCount;
 
@@ -71,7 +70,6 @@ void Mesh::removeVolume(unsigned int volumeNumber)
 		elements.erase(elementNumber);
 	}
 	volumes.erase(volumeNumber);
-#if 1
 	std::set<unsigned> orphanedNodes;
 	for (const auto &[nodeNumber, node]: nodes) {
 		orphanedNodes.insert(nodeNumber);
@@ -84,6 +82,4 @@ void Mesh::removeVolume(unsigned int volumeNumber)
 	for (const auto nodeNumber: orphanedNodes) {
 		nodes.erase(nodeNumber);
 	}
-	std::cout << "orphaned nodes removed: " << orphanedNodes.size() << std::endl;
-#endif
 }

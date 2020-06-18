@@ -93,7 +93,7 @@ namespace
 
 std::vector<vtkSmartPointer<VtkVolume>> makeMesh(const char *path) {
 	auto mesh = new Mesh(readMesh(path)); // утечка
-	mesh->removeVolume(1);
+	mesh->removeVolume(2);
 	std::vector<vtkSmartPointer<VtkVolume>> result;
 	vtkNew<VtkNodePoints> points;
 	vtkNew<VtkNodes> nodes;
